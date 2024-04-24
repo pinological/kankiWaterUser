@@ -1,9 +1,17 @@
 "use client"
 
 import React, { useState } from 'react'
-import { useRef } from 'react'
+
+import { palikaSCData } from '@/utility/data'
 
 const FormEntry = () => {
+
+  const [palikaCa , setPalikaCa] = useState(palikaSCData.Kamal)
+
+  const handelPalikaChange = (e) =>{
+
+    setPalikaCa(palikaSCData[e.target.value])
+  }
 
   return (
     <>
@@ -29,23 +37,24 @@ const FormEntry = () => {
 
       <div className='grid grid-cols-2 gap-3 my-4 items-center'>
       <label> Palika </label>
-      <select className='p-1 '>
+      <select onChange={handelPalikaChange} className='p-1 '>
         <option value="Kamal">Kamal</option>
         <option value="Gauriganj">Gauriganj</option>
         <option value="Gauradaha">Gauradaha</option>
-        <option value="Shivasatakshi ">Rental</option>
+        <option value="Shivasatakshi">Shivasatakshi</option>
       </select>
       </div>
 
       <div className='grid grid-cols-2 gap-3 my-4 items-center'>
       <label> Secondary  </label>
       <select className='p-1 '>
-        <option value="Kamal">Kamal</option>
-        <option value="Gauriganj">Gauriganj</option>
-        <option value="Gauradaha">Gauradaha</option>
-        <option value="Shivasatakshi ">Rental</option>
+        {palikaCa.map((item)=>{
+          return <option key={item} value={item}>{item}</option>
+        })}
       </select>
       </div>
+
+
       
     </form>
     </div>
