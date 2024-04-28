@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useEffect, useState } from 'react'
+import React, { lazy, useEffect, useState } from 'react'
 
 import { palikaSCData } from '@/utility/data'
 
@@ -10,6 +10,8 @@ const FormEntry = () => {
 
   const[numberOfLand, setNumberOfLand] = useState(1)
 
+  const [totalLand , setTotalLand] = useState([{bigha:0, kattha:0, dhur:0,prevKey : 0}])
+
   const handelPalikaChange = (e) =>{
 
     setPalikaCa(palikaSCData[e.target.value])
@@ -18,6 +20,17 @@ const FormEntry = () => {
   const handleNoOfLandChange = (e) => {
     setNumberOfLand(parseInt(e.target.value))
   }
+
+  const handleTotalCalculation = (e,name,key) => {
+    setTotalLand()
+
+   
+  }
+
+  useEffect(()=>{
+    console.log(totalLand)
+  },[totalLand])
+
 
 
   return (
@@ -39,7 +52,7 @@ const FormEntry = () => {
 
       <div className='form-lable-group'>
       <label> Citizenship </label>
-      <input type="text" className='border border-solid border-gray-500 p-1 rounded-md' placeholder='Citizenship'/>
+      <input type="text" className='border border-solid border-gray-300 p-1 rounded-md' placeholder='Citizenship'/>
       </div>
 
       <div className='form-lable-group'>
@@ -84,12 +97,19 @@ const FormEntry = () => {
           return(
               <div key={index} className=" my-3 grid grid-cols-4 ">
                 <span className='text-center p-1'> Land : {index + 1}</span>
-                <input type="number" placeholder='Bigha' className=' mx-2 border-input-form'/>
-                <input type="number" placeholder='Kattha' className='mx-2 border-input-form'/>
-                <input type="number" placeholder='Dhur' className='mx-2 border-input-form'/>
+                <input type="number"  placeholder='Bigha' name='bigha' onChange={(e) => handleTotalCalculation(e, 'bigha',index)} className=' mx-2 border-input-form'/>
+                <input type="number" placeholder='Kattha' name='kattha' onChange={(e) => handleTotalCalculation(e, 'kattha',index)} className='mx-2 border-input-form'/>
+                <input type="number" placeholder='Dhur' name='dhur' onChange={(e) => handleTotalCalculation(e, 'dhur',index)} className='mx-2 border-input-form'/>
               </div>
           )
         })}
+
+      <div className=" grid grid-cols-4 ">
+          <p className=' border border-solid border-gray-300 p-1'>Total</p>
+          <p className=' border border-solid border-gray-300 p-1'>Bigha</p>
+          <p className=' border border-solid border-gray-300 p-1'>Kattha</p>
+          <p className=' border border-solid border-gray-300 p-1'>Dhur</p>
+        </div>
 
       </div>
 
