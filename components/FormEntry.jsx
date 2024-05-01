@@ -10,7 +10,9 @@ const FormEntry = () => {
 
   const[numberOfLand, setNumberOfLand] = useState(1)
 
-  const [totalLand , setTotalLand] = useState([{bigha:0, kattha:0, dhur:0,prevKey : 0}])
+  const [totalLand , setTotalLand] = useState([{bigha:0, kattha:0, dhur:0}])
+
+  const [totalLandCal, setTotalLandCal] = useState({bigha:0, kattha:0, dhur:0})
 
   const handelPalikaChange = (e) =>{
 
@@ -21,15 +23,38 @@ const FormEntry = () => {
     setNumberOfLand(parseInt(e.target.value))
   }
 
-  const handleTotalCalculation = (e,name,key) => {
-    setTotalLand()
+  const handleTotalCalculation = (e, name, key) => {
+    setTotalLand(prev => {
+      const newDataStoreLand = [...prev];
+      newDataStoreLand[key] = {
+        ...newDataStoreLand[key],
+        [name]: parseFloat(e.target.value).toFixed(2)
+      };
+      // Fill in default values for properties that are not being updated
+      newDataStoreLand[key] = {
+        ...newDataStoreLand[key],
+        bigha: newDataStoreLand[key].bigha || 0,
+        kattha: newDataStoreLand[key].kattha || 0,
+        dhur: newDataStoreLand[key].dhur || 0
+      };
+      return newDataStoreLand;
+    });
+  };
 
-   
-  }
 
-  useEffect(()=>{
-    console.log(totalLand)
-  },[totalLand])
+useEffect(() => {
+  const newTotalLandCal = totalLand.reduce((acc, obj) => {
+    acc.bigha = parseFloat(acc.bigha) + parseFloat(obj.bigha);
+    acc.kattha = parseFloat(acc.kattha) + parseFloat(obj.kattha);
+    acc.dhur = parseFloat(acc.dhur) + parseFloat(obj.dhur);
+
+    return acc;
+  }, { bigha: 0, kattha: 0, dhur: 0 });
+
+  setTotalLandCal(newTotalLandCal);
+
+}, [totalLand]);
+
 
 
 
@@ -87,7 +112,7 @@ const FormEntry = () => {
         </div>
 
         <div className=" grid grid-cols-4 ">
-          <p className=' border border-solid border-gray-500 p-1'>No of Land</p>
+          <p className=' border border-solid border-gray-500 p-1'>No of Land </p>
           <p className=' border border-solid border-gray-500 p-1'>Bigha</p>
           <p className=' border border-solid border-gray-500 p-1'>Kattha</p>
           <p className=' border border-solid border-gray-500 p-1'>Dhur</p>
@@ -97,18 +122,18 @@ const FormEntry = () => {
           return(
               <div key={index} className=" my-3 grid grid-cols-4 ">
                 <span className='text-center p-1'> Land : {index + 1}</span>
-                <input type="number"  placeholder='Bigha' name='bigha' onChange={(e) => handleTotalCalculation(e, 'bigha',index)} className=' mx-2 border-input-form'/>
-                <input type="number" placeholder='Kattha' name='kattha' onChange={(e) => handleTotalCalculation(e, 'kattha',index)} className='mx-2 border-input-form'/>
-                <input type="number" placeholder='Dhur' name='dhur' onChange={(e) => handleTotalCalculation(e, 'dhur',index)} className='mx-2 border-input-form'/>
+                <input type="number"   placeholder='Bigha' min={0} max={100} name='bigha' onChange={(e) => handleTotalCalculation(e, 'bigha',index)}  defaultValue={0} className=' mx-2 border-input-form'/>
+                <input type="number"  placeholder='Kattha' min={0} max={100} name='kattha' onChange={(e) => handleTotalCalculation(e, 'kattha',index)} defaultValue={0} className='mx-2 border-input-form'/>
+                <input type="number"  placeholder='Dhur' min={0} max={100} name='dhur' onChange={(e) => handleTotalCalculation(e, 'dhur',index)} defaultValue={0} className='mx-2 border-input-form'/>
               </div>
           )
         })}
 
       <div className=" grid grid-cols-4 ">
-          <p className=' border border-solid border-gray-300 p-1'>Total</p>
-          <p className=' border border-solid border-gray-300 p-1'>Bigha</p>
-          <p className=' border border-solid border-gray-300 p-1'>Kattha</p>
-          <p className=' border border-solid border-gray-300 p-1'>Dhur</p>
+          <p className=' border border-solid border-gray-300 p-1'>Total {numberOfLand}</p>
+          <p className=' border border-solid border-gray-300 p-1'>Bigha {totalLandCal.bigha}</p>
+          <p className=' border border-solid border-gray-300 p-1'>Kattha {totalLandCal.kattha}</p>
+          <p className=' border border-solid border-gray-300 p-1'>Dhur {totalLandCal.dhur}</p>
         </div>
 
       </div>
