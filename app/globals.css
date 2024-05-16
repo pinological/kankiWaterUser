@@ -7,5 +7,5 @@
 }
 
 .border-input-form{
-    @apply border border-solid border-gray-500 p-1 rounded-md;
+    @apply border border-solid border-gray-700 p-1 rounded-md;
 }
